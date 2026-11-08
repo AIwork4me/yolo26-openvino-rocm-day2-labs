@@ -35,7 +35,7 @@ claimed; medians of 3 rounds are reported with per-round spread.
 | B-02 self-hash defect | FIXED — evidence chain CSV→summary→SHA256SUMS; `verify_evidence.py` recomputes from bytes; tamper tests (CSV byte change → FAIL; summary stats change → FAIL) pass | `course/benchmark.py`, `tests/test_v201_fixes.py` |
 | B-03 count-only Lab E | FIXED — per-detection parity (class+IoU≥0.95+conf±0.02); this campaign measured **100/100 images bit-identical (min IoU 1.0, max Δconf 0.0)** | `course/pipeline.py`, campaign `labE_pipeline_compare_*.json` |
 | B-04 notebook execution gate | **6/6 notebooks PASS · 45/45 code cells** (nbclient real execution, expected-output markers, model-rule static gate) | `validation/v2.0.1/notebooks/EXECUTION_MATRIX.md` + `executed/*.ipynb` |
-| Release path references | all referenced paths exist (v2.0.0 release body path `validation/linux_w7900/FINAL_REPORT.md` verified present; v2.0.1 release references `validation/v2.0.1/FINAL_REPORT.md` — this file) | checked in R4 |
+| Release path references | all referenced release paths exist, except the former uncommitted cold-start raw transcript (now explicitly disclosed) (v2.0.0 release body path `validation/linux_w7900/FINAL_REPORT.md` verified present; v2.0.1 release references `validation/v2.0.1/FINAL_REPORT.md` — this file) | checked in R4 |
 
 ## C. R2 — Benchmark scientific revalidation (campaign c20261108_1108)
 
@@ -47,7 +47,7 @@ in-campaign (NNCF MIXED, 150 real train2017 images, 44 s, identity key in
 
 | 实验 | 原始方案 | 优化方案 | 新实测收益 | 精度/资源代价 |
 |---|---|---|---|---|
-| CPU vs GPU (Lab A, e2e) | EPYC 9334 PyTorch P50 191.3 ms | W7900D ROCm P50 13.5 ms | **14.14×**（P95 203.1→14.2） | 平台对比（非软件优化）；轮间波动 7.5%/5.8% |
+| CPU vs GPU (Lab A, e2e) | EPYC 9334 PyTorch P50 191.3 ms | W7900D ROCm P50 13.5 ms | **14.14×**（P95 **470.6→15.7**，由逐轮原始 CSV 重算更正） | 平台对比（非软件优化）；轮间波动 7.5%/5.8% |
 | CPU Runtime (Lab B) | PyTorch 198.5 ms | OpenVINO 87.2 ms | **2.28×** | mAP 0.6398→0.6349（Δ−0.0049，一致）；首次编译 1–2 s |
 | CPU INT8 (Lab C) | FP32 98.3 ms | INT8 78.1 ms | **1.26×**（本轮 P50）；文件大小历史约 3.8×，**非本轮复测** | **ΔmAP −0.0667（0.6349→0.5682，明显代价）** |
 | GPU Resolution (Lab D-A) | imgsz 640: 13.68 ms · mAP .6398 | imgsz 512: 13.50 ms · mAP .6159 | **−1.3% e2e**（batch 1 固定开销主导） | ΔmAP −0.024；**本轮未保存 GPU allocator 显存数据，不可引用旧显存数字作新实测** |
