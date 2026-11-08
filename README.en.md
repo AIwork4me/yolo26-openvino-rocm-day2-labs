@@ -129,7 +129,7 @@ labeled separately)
 | Mode | Throughput img/s | Per-image e2e P50 (scope) |
 |---|---|---|
 | Serial | 58.6 | 14.0 ms (no queue — pure execution) |
-| Async pipeline | 83.1 | 611 ms (burst submit→result, queue included) |
+| Async pipeline | 83.1 | 603.5 ms (median round P50; burst submit→result, queue included) |
 
 **1.42× throughput** · per-detection parity **100/100 images** (class/box/conf
 compared one-to-one, min IoU = 1.0, max Δconf = 0.0 — bit-identical) · the two
