@@ -99,7 +99,7 @@ def test_exactly_24_slides_with_approved_topics():
         38: "Lab B", 39: "FP32", 40: "INT8", 41: "模型压缩",
         42: "Lab C", 43: "GPU", 44: "ROCm", 45: "输入分辨率",
         46: "Batch", 47: "GPU", 48: "Lab D", 49: "AMD CPU",
-        50: "Lab E", 51: "Lab",
+        50: "Lab E", 51: "优化",
     }
     for num, title in slide_rows:
         assert required[int(num)] in title, (num, title)
