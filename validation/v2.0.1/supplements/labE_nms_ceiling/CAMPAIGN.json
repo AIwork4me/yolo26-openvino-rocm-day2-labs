@@ -1,0 +1,83 @@
+{
+  "supplement_id": "labE_nms_ceiling_20261109",
+  "type": "extra_experiment",
+  "status": "supplement_only_not_for_headline_results",
+  "date": "2026-11-09",
+  "parent_lab": "Lab E / notebooks/05_Lab_E_AMD_CPU_GPU_Pipeline.ipynb",
+  "parent_campaign_read_only": "validation/v2.0.1/campaigns/c20261108_1108/labE_pipeline",
+  "report": "docs/LAB_E_SUPPLEMENT_NMS_CEILING.md",
+  "question": "Does shrinking postprocess (nms=False) increase the async pipeline speedup gain?",
+  "machine": {
+    "cpu": "AMD EPYC 9334 (shared host, container quota 16 cores)",
+    "gpu": "AMD Radeon PRO W7900D 48 GB (gfx1100)",
+    "gpu_busy_before_run_pct": 0,
+    "torch": "2.12.0+rocm7.14.1",
+    "ultralytics": "8.4.208"
+  },
+  "model": {
+    "weights": "official yolo26l.pt (same file as parent campaign, unchanged)",
+    "imgsz": 640,
+    "variants": {
+      "baseline": "warmup predict() without nms -> args.nms=None -> end2end=False -> one2many head -> external NMS",
+      "nms_false": "warmup predict(nms=False) -> end2end=True -> one2one head -> NMS-free"
+    }
+  },
+  "images": {
+    "source": "course fixed educational COCO val subset",
+    "n": 100,
+    "same_for_both_sides": true
+  },
+  "measurement": {
+    "rounds": 3,
+    "order": ["baseline,nms_false", "nms_false,baseline", "baseline,nms_false"],
+    "modes": ["serial", "async_pipeline"],
+    "queue_depth": 4,
+    "warmup": "course _prewarm() over all 100 images, untimed",
+    "gpu_sync": "course cuda_sync() around every timed forward",
+    "published_statistic": "median across rounds",
+    "raw_samples_kept": true
+  },
+  "headline": {
+    "post_ms_serial_median": {"baseline": 0.6957, "nms_false": 0.2536},
+    "serial_imgs_per_s_median": {"baseline": 74.72, "nms_false": 76.73},
+    "pipeline_imgs_per_s_median": {"baseline": 88.88, "nms_false": 90.59},
+    "pipeline_gain_median": {"baseline": 1.190, "nms_false": 1.182},
+    "cpu_fraction_serial_median": {"baseline": 0.2185, "nms_false": 0.1914},
+    "cross_variant_detection_parity": "10/100 images identical, 90/100 differ",
+    "cost_note": "average |delta_conf| 0.04207, max 0.59725 on 512 matched boxes; 590 -> 585 boxes total",
+    "map50_95": {"baseline": 0.639839, "nms_false": 0.634109, "delta": -0.005730},
+    "map50": {"baseline": 0.796192, "nms_false": 0.791307, "delta": -0.004885},
+    "map75": {"baseline": 0.688182, "nms_false": 0.679421, "delta": -0.008761},
+    "map_cross_check": "baseline 0.639839 reproduces the published PyTorch-CUDA-640 mAP50-95 of 0.6398, confirming the measurement scope matches the course protocol"
+  },
+  "parent_campaign_cross_check": {
+    "published_gain_by_round": [1.1597, 1.2328, 1.4181],
+    "serial_infer_sum_ms_by_round": [1046, 1129, 1350],
+    "pipeline_infer_sum_ms_by_round": [1075, 1076, 1093],
+    "theoretical_ceiling_serial": "1.165x - 1.196x (current implementation)",
+    "finding": "round-3 gain 1.418x exceeds the ceiling because the serial baseline was disturbed; re-measured quiet-host gain is 1.19x",
+    "action": "documentation cross-check suggestion only; parent campaign files were NOT modified"
+  },
+  "accuracy": {
+    "method": "course.benchmark.map5095 scope: fixed educational val_subset (120 images), FP32, batch 8, imgsz 640, cuda",
+    "script": "scripts/measure_labE_nms_map.py",
+    "repeats": 1,
+    "note": "mAP is evaluated once per campaign, matching scripts/run_campaign.py; latency results use 3 rounds"
+  },
+  "known_limits": [
+    "mAP measured once (course protocol); no mAP confidence interval is claimed",
+    "nms changes the inference head branch, so this is not a like-for-like performance-only comparison",
+    "no full formal campaign: no CPU affinity pinning, no round_env load/throttle capture, not wired into verify_evidence.py",
+    "shared host, no exclusive hardware claim",
+    "results claimed only for this machine class"
+  ],
+  "honesty_rules_compliance": {
+    "official_weights_only": true,
+    "no_model_or_image_swaps_within_a_pair": true,
+    "labeled_as_extra_experiment": true,
+    "speed_reported_with_cost": true,
+    "accuracy_cost_reported_as_delta_mAP": true,
+    "evidence_hashed": true,
+    "not_merged_into_official_results": true
+  }
+}

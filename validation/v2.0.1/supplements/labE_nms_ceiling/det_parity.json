@@ -1,0 +1,41 @@
+{
+ "images_compared": 100,
+ "mismatch_count": 93,
+ "examples": [
+  [
+   "000000005529.jpg",
+   "box/conf mismatch"
+  ],
+  [
+   "000000021167.jpg",
+   3,
+   4
+  ],
+  [
+   "000000022705.jpg",
+   "box/conf mismatch"
+  ],
+  [
+   "000000025228.jpg",
+   "box/conf mismatch"
+  ],
+  [
+   "000000027620.jpg",
+   "box/conf mismatch"
+  ],
+  [
+   "000000027768.jpg",
+   7,
+   6
+  ],
+  [
+   "000000039405.jpg",
+   12,
+   13
+  ],
+  [
+   "000000041990.jpg",
+   "box/conf mismatch"
+  ]
+ ]
+}

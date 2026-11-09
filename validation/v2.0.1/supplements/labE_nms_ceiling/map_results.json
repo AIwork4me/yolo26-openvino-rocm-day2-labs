@@ -1,0 +1,19 @@
+{
+ "baseline": {
+  "variant": "baseline",
+  "nms": null,
+  "map50_95": 0.639839,
+  "map50": 0.796192,
+  "map75": 0.688182,
+  "wall_s": 44.14
+ },
+ "nms_false": {
+  "variant": "nms_false",
+  "nms": false,
+  "map50_95": 0.634109,
+  "map50": 0.791307,
+  "map75": 0.679421,
+  "wall_s": 42.9
+ },
+ "delta_map50_95": -0.00573
+}

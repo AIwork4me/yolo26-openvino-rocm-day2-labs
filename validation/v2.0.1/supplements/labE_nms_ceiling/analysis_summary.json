@@ -1,0 +1,33 @@
+{
+ "median": {
+  "baseline_serial": {
+   "total_ms": 1338.42,
+   "images_per_s": 74.715,
+   "post_ms_mean": 0.6957,
+   "cpu_frac": 0.2185,
+   "gain": 1.1896
+  },
+  "baseline_pipeline": {
+   "total_ms": 1125.14,
+   "images_per_s": 88.878,
+   "post_ms_mean": 0.6897,
+   "cpu_frac": 0.2637,
+   "gain": 1.1896
+  },
+  "nms_false_serial": {
+   "total_ms": 1303.21,
+   "images_per_s": 76.733,
+   "post_ms_mean": 0.2536,
+   "cpu_frac": 0.1914,
+   "gain": 1.1816
+  },
+  "nms_false_pipeline": {
+   "total_ms": 1103.84,
+   "images_per_s": 90.593,
+   "post_ms_mean": 0.2489,
+   "cpu_frac": 0.2295,
+   "gain": 1.1816
+  }
+ },
+ "parent_campaign": "validation/v2.0.1/campaigns/c20261108_1108/labE_pipeline"
+}

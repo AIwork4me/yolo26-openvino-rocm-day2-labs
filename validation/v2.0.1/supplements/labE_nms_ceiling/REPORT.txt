@@ -1,0 +1,45 @@
+============================================================================================================
+A. 原 campaign（只读）：CPU 段占比 / 收益上限 / 实测效率
+   Parent campaign (read-only): CPU share / ceilings / measured efficiency
+============================================================================================================
+file                        load     pre   infer    post |    cpu%    hid%   post% |   Amdahl     real   floor%
+async_pipeline_20261108_111119     194     103    1075      87 |   26.3%   20.3%    6.0% |   1.357x   1.255x    98.1%
+async_pipeline_20261108_111253     191     105    1076      93 |   26.5%   20.2%    6.3% |   1.361x   1.253x    98.0%
+async_pipeline_20261108_111427     192     100    1093      87 |   25.7%   19.8%    5.9% |   1.346x   1.247x    98.1%
+serial_20261108_111119       174      48    1046      89 |   22.9%   16.4%    6.6% |   1.298x   1.196x    82.6%
+serial_20261108_111253       182      52    1129      89 |   22.3%   16.1%    6.1% |   1.286x   1.192x    82.9%
+serial_20261108_111427       181      58    1350      99 |   20.0%   14.1%    5.9% |   1.250x   1.165x    84.9%
+
+============================================================================================================
+B. Bonus A/B: median across 3 interleaved rounds
+============================================================================================================
+variant     mode        post_ms     img/s      cpu%    Amdahl      gain      eta
+baseline    serial       0.6957     74.72    21.85%     1.280x     1.190x    67.8%
+baseline    pipeline     0.6897     88.88    26.37%     1.358x     1.190x    52.9%
+nms_false   serial       0.2536     76.73    19.14%     1.237x     1.182x    76.7%
+nms_false   pipeline     0.2489     90.59    22.95%     1.298x     1.182x    61.0%
+
+  post_ms  : 0.6957 -> 0.2536 ms (-63.5%, saves 0.4421 ms/image)
+  serial   throughput: 74.72 -> 76.73 img/s (+2.70%)
+  pipeline throughput: 88.88 -> 90.59 img/s (+1.93%)
+  gain     : 1.190x -> 1.182x
+
+============================================================================================================
+C. Detection cost: baseline one2many+NMS vs nms_false one2one NMS-free
+============================================================================================================
+  identical images       : 10 / 100
+  images with differences: 90 / 100
+  total boxes            : 590 -> 585 (-5)
+  images with box-count change: 46 ; max delta +7
+  matched boxes (IoU>=0.95): 512, mean IoU 0.98765, mean |dconf| 0.04207, max 0.59725
+
+============================================================================================================
+D. Accuracy cost / 精度代价 (course protocol: val_subset, FP32, batch 8, imgsz 640)
+============================================================================================================
+variant         mAP50-95        mAP50        mAP75
+baseline        0.639839     0.796192     0.688182
+nms_false       0.634109     0.791307     0.679421
+  delta_mAP50-95 = -0.005730  |  delta_mAP50 = -0.004885
+  baseline 0.639839 matches the published PyTorch-CUDA-640 value (0.6398): measurement scope cross-checked.
+
+NOTE: parent campaign files were read only. See CAMPAIGN.json for setup and known limits.
