@@ -67,6 +67,14 @@ It checks: AMD CPU, gfx1100 GPU, ROCm torch pins, real GPU compute
   `.venv/bin/python -m ipykernel install --user --name yolo26-day2
   --display-name "Python 3.12 (YOLO26 Day 02 · ROCm)"`.
 
+### Chart cells flood with `findfont: Font family 'Noto Sans CJK SC' not found`
+
+- Not an error: the cell still succeeds (last line `[chart] … .png (+svg)`).
+  The container lacks CJK fonts, and matplotlib cannot index `.ttc` files, so
+  `apt install fonts-noto-cjk` alone is NOT enough.
+- Full fix (extract `.otf` faces, clear matplotlib cache, restart kernel):
+  see [FIX_CHART_CJK_FONTS.md](FIX_CHART_CJK_FONTS.md).
+
 ### Restoring on a fresh Radeon Cloud instance
 
 ```bash
